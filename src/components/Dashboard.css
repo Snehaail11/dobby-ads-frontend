@@ -149,6 +149,16 @@
   border-color: var(--danger);
 }
 
+.action-btn.ai-btn {
+  background: linear-gradient(135deg, #6366f1, #4f46e5);
+  color: white;
+  border: none;
+}
+
+.action-btn.ai-btn:hover {
+  opacity: 0.9;
+}
+
 /* ===============================================
    ERROR TOAST
    =============================================== */

@@ -2,6 +2,7 @@ import React, { useState, useEffect, useCallback, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { folderApi, imageApi } from '../services/api';
+import AIChat from './AIChat';
 import './Dashboard.css';
 
 const Dashboard = () => {
@@ -23,6 +24,7 @@ const Dashboard = () => {
   const [imageName, setImageName] = useState('');
   const [contextMenu, setContextMenu] = useState(null);
   const [draggedItem, setDraggedItem] = useState(null);
+  const [showAIChat, setShowAIChat] = useState(false);
   const fileInputRef = useRef(null);
 
   const showError = useCallback((message) => {
@@ -210,9 +212,11 @@ const Dashboard = () => {
             <span className="btn-icon">📷</span>
             Upload Image
           </button>
-          <button className="action-btn danger" onClick={handleLogout}>
-            <span className="btn-icon">🚪</span>
-            Logout
+<button className="action-btn danger" onClick={handleLogout}>
+            🚪
+          </button>
+          <button className="action-btn ai-btn" onClick={() => setShowAIChat(!showAIChat)}>
+            🤖 AI
           </button>
         </div>
       </div>
@@ -449,6 +453,8 @@ const Dashboard = () => {
           )}
         </div>
       )}
+
+      {showAIChat && <AIChat />}
     </div>
   );
 };
