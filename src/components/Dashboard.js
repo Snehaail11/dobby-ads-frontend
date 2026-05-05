@@ -128,6 +128,9 @@ const Dashboard = () => {
     
     const formData = new FormData();
     formData.append('name', imageName || file.name.replace(/\.[^/.]+$/, ''));
+    if (currentFolderId) {
+      formData.append('folderId', currentFolderId);
+    }
     formData.append('image', file);
     
     try {

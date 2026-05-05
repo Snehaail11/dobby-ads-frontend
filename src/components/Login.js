@@ -9,7 +9,10 @@ const Login = () => {
   const [password, setPassword] = useState('');
   const [name, setName] = useState('');
   const [error, setError] = useState('');
+  const [success, setSuccess] = useState('');
   const [loading, setLoading] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
+  const [showSignupPrompt, setShowSignupPrompt] = useState(false);
   
   const { login, signup } = useAuth();
   const navigate = useNavigate();
@@ -17,21 +20,42 @@ const Login = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError('');
+    setSuccess('');
     setLoading(true);
 
     let result;
     if (isLogin) {
       result = await login(email, password);
+      
+      if (!result.success && (result.message.includes('not found') || result.message.includes('Invalid'))) {
+        setShowSignupPrompt(true);
+        setError('');
+      }
     } else {
       result = await signup(email, password, name);
+      
+      if (result.success) {
+        setSuccess('Account created! Redirecting to login...');
+        setTimeout(() => {
+          setIsLogin(true);
+          setSuccess('');
+          setPassword('');
+        }, 1500);
+      } else {
+        setError(result.message);
+      }
     }
 
-    if (result.success) {
+    if (result.success && isLogin) {
       navigate('/dashboard');
-    } else {
-      setError(result.message);
     }
     setLoading(false);
+  };
+
+  const handleCreateAccount = () => {
+    setShowSignupPrompt(false);
+    setIsLogin(false);
+    setError('');
   };
 
   return (
@@ -43,19 +67,30 @@ const Login = () => {
         </div>
         
         <div className="login-tabs">
-          <button className={`tab ${isLogin ? 'active' : ''}`} onClick={() => setIsLogin(true)}>
+          <button className={`tab ${isLogin ? 'active' : ''}`} onClick={() => { setIsLogin(true); setError(''); setShowSignupPrompt(false); }}>
             Login
           </button>
-          <button className={`tab ${!isLogin ? 'active' : ''}`} onClick={() => setIsLogin(false)}>
+          <button className={`tab ${!isLogin ? 'active' : ''}`} onClick={() => { setIsLogin(false); setError(''); }}>
             Sign Up
           </button>
         </div>
+
+        {success && <div className="login-success">{success}</div>}
+        
+        {showSignupPrompt && (
+          <div className="login-prompt">
+            <p>Account doesn't exist. Create one?</p>
+            <button className="btn-create" onClick={handleCreateAccount}>
+              Create Account
+            </button>
+          </div>
+        )}
 
         <form onSubmit={handleSubmit}>
           {!isLogin && (
             <input
               type="text"
-              placeholder="Full Name"
+              placeholder="Your name"
               value={name}
               onChange={(e) => setName(e.target.value)}
               required
@@ -70,17 +105,26 @@ const Login = () => {
             required
           />
           
-          <input
-            type="password"
-            placeholder="Password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            required
-          />
+          <div className="password-field">
+            <input
+              type={showPassword ? 'text' : 'password'}
+              placeholder="Password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              required
+            />
+            <button
+              type="button"
+              className="toggle-password"
+              onClick={() => setShowPassword(!showPassword)}
+            >
+              {showPassword ? '🙈' : '👁️'}
+            </button>
+          </div>
           
-          {error && <div className="error-message">{error}</div>}
+          {error && <div className="login-error">{error}</div>}
           
-          <button type="submit" className="submit-btn" disabled={loading}>
+          <button type="submit" className="btn-primary" disabled={loading}>
             {loading ? 'Please wait...' : (isLogin ? 'Login' : 'Sign Up')}
           </button>
         </form>
