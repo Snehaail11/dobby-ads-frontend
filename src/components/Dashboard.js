@@ -173,7 +173,7 @@ const Dashboard = () => {
         <img src={image.url} alt={image.name} onClick={() => setSelectedImage(image)} />
       </div>
       <div className="image-name">{image.name}</div>
-      <div className="image-size">{image.sizeFormatted}</div>
+      <div className="image-size">{formatBytes(image.size)}</div>
       <button className="delete-image-btn" onClick={() => handleDeleteImage(image.id)}>🗑️</button>
     </div>
   );
