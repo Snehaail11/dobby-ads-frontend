@@ -124,7 +124,7 @@ const Dashboard = () => {
     }
     
     if (!currentFolderId) {
-      showError('Please select a folder first');
+      showError('Please create a folder first, then upload inside it');
       return;
     }
     

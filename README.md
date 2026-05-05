@@ -80,3 +80,9 @@ Update in `src/services/api.js` if using different backend.
 ## 📄 License
 
 ISC - Dobby Ads Team
+
+## 🔗 Links
+
+- **Live App**: https://dobby-ads-frontend.vercel.app
+- **Backend API**: https://dobby-ads-backend-fu75.onrender.com/api
+- **GitHub**: https://github.com/Snehaail11/dobby-ads-frontend
