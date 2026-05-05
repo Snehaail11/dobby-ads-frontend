@@ -1,70 +1,82 @@
-# Getting Started with Create React App
+# 📁 Dobby Ads - Frontend
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+React 19 frontend for the Dobby Ads application with modern UI and built-in AI assistant.
 
-## Available Scripts
+![React](https://img.shields.io/badge/React-19.x-61dafb) ![Vercel](https://img.shields.io/badge/Vercel-Deployed-000)
 
-In the project directory, you can run:
+## 🚀 Features
 
-### `npm start`
+- **Modern UI** - Clean dashboard with Inter font and CSS variables
+- **Responsive** - Works on mobile and desktop
+- **Folder Management** - Create, rename, delete nested folders
+- **Image Upload** - Drag and drop or click to upload
+- **Breadcrumb Navigation** - Easy folder navigation
+- **Context Menus** - Right-click actions
+- **Lightbox** - Full-screen image viewing
+- **AI Chat Assistant** - Natural language commands
+- **Loading States** - Visual feedback
+- **Error Handling** - Toast notifications
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+## 🖥️ Live App
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+**URL:** https://dobby-ads-frontend.vercel.app
 
-### `npm test`
+## 💻 Development
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+```bash
+cd dobby-ads-frontend
+npm install
+npm start
+```
 
-### `npm run build`
+Opens at http://localhost:3000
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+## 🔧 Build
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+```bash
+npm run build
+```
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+Builds to `build/` folder for production.
 
-### `npm run eject`
+## 🤖 AI Assistant
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+Click the **🤖 AI** button in the header to open the chat.
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+### Available Commands
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+| Command | Example |
+|---------|---------|
+| Create folder | "Create folder Marketing" |
+| List folders | "List folders" |
+| Delete folder | "Delete folder Old" |
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+## 📁 Project Structure
 
-## Learn More
+```
+src/
+├── components/
+│   ├── Dashboard.js    # Main dashboard
+│   ├── Dashboard.css  # Dashboard styles
+│   ├── AIChat.js      # AI chat assistant
+│   ├── AIChat.css    # Chat styles
+│   ├── Login.js      # Login/Signup
+│   └── Login.css    # Login styles
+├── context/
+│   └── AuthContext.js # Authentication
+├── services/
+│   └── api.js       # API client
+├── App.js          # Main app
+├── App.css         # Global styles
+└── index.js       # Entry point
+```
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+## 🔗 API Connection
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+The frontend connects to: `https://dobby-ads-backend-fu75.onrender.com/api`
 
-### Code Splitting
+Update in `src/services/api.js` if using different backend.
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+## 📄 License
 
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+ISC - Dobby Ads Team
