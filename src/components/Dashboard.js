@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { folderApi, imageApi } from '../services/api';
@@ -19,18 +19,17 @@ const Dashboard = () => {
   const [uploading, setUploading] = useState(false);
   const [selectedImage, setSelectedImage] = useState(null);
   const [imageName, setImageName] = useState('');
-  const [viewMode, setViewMode] = useState('grid'); // grid or list
   const [contextMenu, setContextMenu] = useState(null);
 
-  useEffect(() => {
-    if (!localStorage.getItem('token')) {
-      navigate('/login');
-    } else {
-      loadCurrentFolder();
-    }
-  }, [currentFolderId]);
+  const formatBytes = useCallback((bytes) => {
+    if (bytes === 0) return '0 Bytes';
+    const k = 1024;
+    const sizes = ['Bytes', 'KB', 'MB', 'GB'];
+    const i = Math.floor(Math.log(bytes) / Math.log(k));
+    return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
+  }, []);
 
-  const loadCurrentFolder = async () => {
+  const loadCurrentFolder = useCallback(async () => {
     setLoading(true);
     try {
       const foldersRes = await folderApi.getAll(currentFolderId);
@@ -47,7 +46,15 @@ const Dashboard = () => {
       console.error('Error loading folder:', error);
     }
     setLoading(false);
-  };
+  }, [currentFolderId]);
+
+  useEffect(() => {
+    if (!localStorage.getItem('token')) {
+      navigate('/login');
+    } else {
+      loadCurrentFolder();
+    }
+  }, [currentFolderId, loadCurrentFolder, navigate]);
 
   const handleCreateFolder = async () => {
     if (!newFolderName.trim()) return;
@@ -140,14 +147,6 @@ const Dashboard = () => {
     }
   };
 
-  const formatBytes = (bytes) => {
-    if (bytes === 0) return '0 Bytes';
-    const k = 1024;
-    const sizes = ['Bytes', 'KB', 'MB', 'GB'];
-    const i = Math.floor(Math.log(bytes) / Math.log(k));
-    return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
-  };
-
   const handleLogout = () => {
     logout();
     navigate('/login');
@@ -181,7 +180,6 @@ const Dashboard = () => {
 
   return (
     <div className="dashboard">
-      {/* Header */}
       <div className="dashboard-header">
         <div className="logo">
           <h2>📁 Dobby Ads</h2>
@@ -200,7 +198,6 @@ const Dashboard = () => {
         </div>
       </div>
 
-      {/* Breadcrumb */}
       <div className="breadcrumb">
         <span className="breadcrumb-item" onClick={() => navigateBack(-1)}>
           Root
@@ -215,17 +212,15 @@ const Dashboard = () => {
         ))}
       </div>
 
-      {/* Content */}
       <div className="dashboard-content">
         {loading ? (
           <div className="loading">Loading...</div>
         ) : (
           <>
-            {/* Folders Grid */}
             {folders.length > 0 && (
               <div className="section">
                 <h3>Folders</h3>
-                <div className={viewMode === 'grid' ? 'folders-grid' : 'folders-list'}>
+                <div className="folders-grid">
                   {folders.map(folder => (
                     <FolderCard key={folder.id} folder={folder} />
                   ))}
@@ -233,7 +228,6 @@ const Dashboard = () => {
               </div>
             )}
 
-            {/* Images Grid */}
             {images.length > 0 && (
               <div className="section">
                 <h3>Images</h3>
@@ -245,7 +239,6 @@ const Dashboard = () => {
               </div>
             )}
 
-            {/* Empty State */}
             {folders.length === 0 && images.length === 0 && (
               <div className="empty-state">
                 <div className="empty-icon">📂</div>
@@ -265,7 +258,6 @@ const Dashboard = () => {
         )}
       </div>
 
-      {/* Create Folder Modal */}
       {showCreateFolder && (
         <div className="modal" onClick={() => setShowCreateFolder(false)}>
           <div className="modal-content" onClick={(e) => e.stopPropagation()}>
@@ -285,7 +277,6 @@ const Dashboard = () => {
         </div>
       )}
 
-      {/* Upload Image Modal */}
       {showUploadImage && (
         <div className="modal" onClick={() => setShowUploadImage(false)}>
           <div className="modal-content" onClick={(e) => e.stopPropagation()}>
@@ -310,7 +301,6 @@ const Dashboard = () => {
         </div>
       )}
 
-      {/* Image Preview Modal */}
       {selectedImage && (
         <div className="modal" onClick={() => setSelectedImage(null)}>
           <div className="modal-content image-preview-modal" onClick={(e) => e.stopPropagation()}>
@@ -322,7 +312,6 @@ const Dashboard = () => {
         </div>
       )}
 
-      {/* Context Menu */}
       {contextMenu && (
         <div 
           className="context-menu"
