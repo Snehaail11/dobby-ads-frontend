@@ -123,17 +123,11 @@ const Dashboard = () => {
       return;
     }
     
-    if (!currentFolderId) {
-      showError('Please create a folder first, then upload inside it');
-      return;
-    }
-    
     setActionLoading(true);
     setUploadProgress(0);
     
     const formData = new FormData();
     formData.append('name', imageName || file.name.replace(/\.[^/.]+$/, ''));
-    formData.append('folderId', currentFolderId);
     formData.append('image', file);
     
     try {
