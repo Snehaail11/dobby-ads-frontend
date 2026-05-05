@@ -1,13 +1,11 @@
 import axios from 'axios';
 
-// Use environment variable with fallback
-const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:5000/api';
+const API_URL = 'https://dobby-ads-backend-fu75.onrender.com/api';
 
 const api = axios.create({
   baseURL: API_URL,
 });
 
-// Add token to requests
 api.interceptors.request.use((config) => {
   const token = localStorage.getItem('token');
   if (token) {
@@ -16,7 +14,6 @@ api.interceptors.request.use((config) => {
   return config;
 });
 
-// Folder API
 export const folderApi = {
   getAll: (parentFolderId = null) => 
     api.get('/folders', { params: { parentFolderId } }),
@@ -34,7 +31,6 @@ export const folderApi = {
     api.get(`/folders/${id}/size`),
 };
 
-// Image API
 export const imageApi = {
   getByFolder: (folderId) => 
     api.get(`/images/folder/${folderId}`),
