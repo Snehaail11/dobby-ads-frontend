@@ -253,10 +253,10 @@ const Dashboard = () => {
             <div className="storage-info">
               <span>📊 {folders.length} folders · {images.length} images</span>
               <div className="view-toggle">
-                <button className={viewMode === 'grid' ? 'active'} onClick={() => setViewMode('grid')}>
+                <button className={viewMode === 'grid' ? 'active' : ''} onClick={() => setViewMode('grid')}>
                   <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg>
                 </button>
-                <button className={viewMode === 'list' ? 'active'} onClick={() => setViewMode('list')}>
+                <button className={viewMode === 'list' ? 'active' : ''} onClick={() => setViewMode('list')}>
                   <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg>
                 </button>
               </div>
