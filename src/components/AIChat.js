@@ -81,7 +81,7 @@ export default function AIChat() {
         }
         
         default:
-          response = 'Try commands like: "Create folder Marketing" or "List folders"';
+          response = 'I understand these commands:\n• "Create folder [name]"\n• "List folders"\n• "Delete folder [name]"\n\nJust type naturally!';
       }
       
       setMessages(prev => [...prev, { role: 'assistant', content: response }]);
@@ -101,10 +101,12 @@ export default function AIChat() {
       <div className="ai-chat-messages">
         {messages.length === 0 && (
           <div className="ai-chat-welcome">
-            Try commands like:<br/>
+            👋 AI is ready!<br/>
+            <br/>
+            Try:<br/>
             • "Create folder Marketing"<br/>
             • "List folders"<br/>
-            • "Delete folder Old"
+            • "Delete folder Test"
           </div>
         )}
         {messages.map((msg, i) => (
