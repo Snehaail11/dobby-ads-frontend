@@ -26,6 +26,22 @@
   color: white;
   font-weight: 600;
   border-radius: 16px 16px 0 0;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.ai-chat-header .close-btn {
+  background: none;
+  border: none;
+  color: white;
+  font-size: 18px;
+  cursor: pointer;
+  opacity: 0.8;
+}
+
+.ai-chat-header .close-btn:hover {
+  opacity: 1;
 }
 
 .ai-chat-messages {

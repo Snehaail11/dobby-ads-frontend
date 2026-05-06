@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import './AIChat.css';
 
-export default function AIChat({ onAction }) {
+export default function AIChat({ onAction, onClose }) {
   const [messages, setMessages] = useState([]);
   const [input, setInput] = useState('');
   const [loading, setLoading] = useState(false);
@@ -148,7 +148,8 @@ export default function AIChat({ onAction }) {
   return (
     <div className="ai-chat">
       <div className="ai-chat-header">
-        <span>🤖 AI Assistant</span>
+        <span>AI Assistant</span>
+        <button className="close-btn" onClick={onClose}>x</button>
       </div>
       
       <div className="ai-chat-messages">
