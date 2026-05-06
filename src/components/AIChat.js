@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import './AIChat.css';
 
-export default function AIChat() {
+export default function AIChat({ onAction }) {
   const [messages, setMessages] = useState([]);
   const [input, setInput] = useState('');
   const [loading, setLoading] = useState(false);
@@ -79,6 +79,7 @@ export default function AIChat() {
           });
           const result = await res.json();
           response = result.success ? `✅ Created folder "${data.name}"` : `❌ ${result.message}`;
+          if (result.success && onAction) onAction();
           break;
         }
         
@@ -105,6 +106,7 @@ export default function AIChat() {
             });
             const delData = await delRes.json();
             response = delData.success ? `✅ Deleted folder "${data.name}"` : `❌ ${delData.message}`;
+            if (delData.success && onAction) onAction();
           }
           break;
         }

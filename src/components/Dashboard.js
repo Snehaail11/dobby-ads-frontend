@@ -453,7 +453,7 @@ const Dashboard = () => {
         </div>
       )}
 
-      {showAIChat && <AIChat />}
+      {showAIChat && <AIChat onAction={loadCurrentFolder} />}
       
       {!showAIChat && (
         <button 
