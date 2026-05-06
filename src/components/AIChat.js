@@ -9,29 +9,36 @@ export default function AIChat() {
   const processCommand = async (text) => {
     const lower = text.toLowerCase();
     
-    // Parse natural language commands
-    if (lower.includes('create folder')) {
-      const match = text.match(/create\s+folder\s+(?:called\s+)?["']?([^"']+)["']?/i);
+    // Create folder
+    if (lower.includes('create') && lower.includes('folder')) {
+      const match = text.match(/create\s+(?:a\s+)?folder\s+(?:called\s+)?["']?([^"']+)["']?/i);
       const name = match ? match[1].trim() : 'New Folder';
       return { action: 'create_folder', data: { name } };
     }
     
-    if (lower.includes('list') && lower.includes('folder')) {
+    // List folders
+    if ((lower.includes('list') || lower.includes('show') || lower.includes('all')) && lower.includes('folder')) {
       return { action: 'list_folders', data: {} };
     }
     
-    if (lower.includes('show') && lower.includes('image')) {
-      return { action: 'list_images', data: {} };
+    // Show images
+    if ((lower.includes('show') || lower.includes('list') || lower.includes('what')) && lower.includes('image')) {
+      // Try to extract folder name from query
+      const match = text.match(/(?:in|from|inside)\s+(?:folder\s+)?["']?([^"']+)["']?/i);
+      const folderName = match ? match[1].trim() : null;
+      return { action: 'show_images', data: { folderName } };
     }
     
+    // Delete folder
+    if (lower.includes('delete') && lower.includes('folder')) {
+      const match = text.match(/delete\s+(?:the\s+)?folder\s+["']?([^"']+)["']?/i);
+      const name = match ? match[1].trim() : null;
+      return { action: 'delete_folder', data: { name: name || 'unknown' } };
+    }
+    
+    // Folder size
     if (lower.includes('size') || lower.includes('how big')) {
       return { action: 'get_folder_size', data: {} };
-    }
-    
-    if (lower.includes('delete folder')) {
-      const match = text.match(/delete\s+folder\s+["']?([^"']+)["']?/i);
-      const name = match ? match[1].trim() : null;
-      return { action: 'delete_folder', data: { name } };
     }
     
     return { action: 'help', data: {} };
@@ -77,6 +84,50 @@ export default function AIChat() {
         
         case 'help': {
           response = `🤖 AI Commands:\n• "Create folder [name]"\n• "List folders"\n• "Show images in [folder]"\n• "Delete folder [name]"\n• "How big is [folder]?"`;
+          break;
+        }
+        
+        case 'delete_folder': {
+          // First get all folders to find by name
+          const listRes = await fetch('https://dobby-ads-backend-fu75.onrender.com/api/folders', {
+            headers: { 'x-auth-token': localStorage.getItem('token') }
+          });
+          const listData = await listRes.json();
+          const folders = listData.folders || [];
+          const folder = folders.find(f => f.name.toLowerCase() === data.name.toLowerCase());
+          
+          if (!folder) {
+            response = `❌ Folder "${data.name}" not found`;
+          } else {
+            const delRes = await fetch(`https://dobby-ads-backend-fu75.onrender.com/api/folders/${folder.id}`, {
+              method: 'DELETE',
+              headers: { 'x-auth-token': localStorage.getItem('token') }
+            });
+            const delData = await delRes.json();
+            response = delData.success ? `✅ Deleted folder "${data.name}"` : `❌ ${delData.message}`;
+          }
+          break;
+        }
+        
+        case 'show_images': {
+          // Need folder ID - get from folder name first
+          const listRes = await fetch('https://dobby-ads-backend-fu75.onrender.com/api/folders', {
+            headers: { 'x-auth-token': localStorage.getItem('token') }
+          });
+          const listData = await listRes.json();
+          const folders = listData.folders || [];
+          const folder = folders.find(f => f.name.toLowerCase().includes(data.folderName?.toLowerCase()));
+          
+          if (!folder) {
+            response = `❌ Folder "${data.folderName}" not found`;
+          } else {
+            const imgRes = await fetch(`https://dobby-ads-backend-fu75.onrender.com/api/images/folder/${folder.id}`, {
+              headers: { 'x-auth-token': localStorage.getItem('token') }
+            });
+            const imgData = await imgRes.json();
+            const images = imgData.images || [];
+            response = images.length ? images.map(img => `🖼️ ${img.name} (${img.sizeFormatted})`).join('\n') : 'No images in this folder';
+          }
           break;
         }
         
